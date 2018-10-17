@@ -34,12 +34,12 @@ class LogisticRegression:
 
     
     def predict(self,X):
+        if(self.normalize):
+            X = (X - self._min) / (self._max - self._min)
         if(self.add_bais):
-            X = (X - self._min) / (self._max - self._min)
-            return 1/(1+np.e**(-np.c_[np.ones(X.shape[0]), X].dot(th)))
+            return np.where((1/(1+np.e**(-np.c_[np.ones(X.shape[0]), X].dot(th)))) > 0.5, 1, 0)
         else:
-            X = (X - self._min) / (self._max - self._min)
-            return X.dot(self.th)
+            return np.where(X.dot(self.th) > 0.5, 1, 0)
 
 
 
