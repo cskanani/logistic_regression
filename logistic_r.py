@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 class LogisticRegression:
     def __init__(self,normalize=True,add_bais=True,learning_rate=0.1,toll=0.0001,max_itr=100):
         self.normalize = normalize
@@ -46,23 +47,29 @@ class LogisticRegression:
 
 
 dt = np.loadtxt('data/data.csv',delimiter=',',skiprows=1)
-x_dt = dt[:,:2]
-y_dt = dt[:,2:]
+np.random.shuffle(dt)
+n = dt.shape[0]
+x_train = dt[:int(n*.8),:2]
+y_train = dt[:int(n*.8),2:]
+x_test = dt[int(n*.8):,:2]
+y_test = dt[int(n*.8):,2:]
 
 lr = LogisticRegression(max_itr=100,toll=-1,learning_rate=1,normalize=False)
-lr.fit(x_dt,y_dt)
+lr.fit(x_train,y_train)
 th = lr.th
 
-print('Original Value, Predicted Values')
-print(np.c_[y_dt,lr.predict(x_dt)])
+pv = lr.predict(x_test)
+print('Original Value, Predicted Values for test data')
+print(np.c_[y_test,pv])
 
+acc = 1 - sum(abs(pv-y_test)) / (n-int(n*.8))
+print('accuracy for test data : {}'.format(acc))
+    
 
-import matplotlib.pyplot as plt
+col= ['red' if l == 0 else 'green' for l in y_test]
+plt.scatter(x_test[:,0],x_test[:,1],c=col)
 
-col= ['red' if l == 0 else 'green' for l in y_dt]
-plt.scatter(x_dt[:,0],x_dt[:,1],c=col)
-
-y_vals = -(x_dt[:,0] * th[1] + th[0])/th[2]
-plt.plot(x_dt[:,0], y_vals)
+y_vals = -(x_test[:,0] * th[1] + th[0])/th[2]
+plt.plot(x_test[:,0], y_vals)
 
 plt.show()
