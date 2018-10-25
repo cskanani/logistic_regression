@@ -38,7 +38,7 @@ class LogisticRegression:
         if(self.normalize):
             X = (X - self._min) / (self._max - self._min)
         if(self.add_bais):
-            return np.where((1/(1+np.e**(-np.c_[np.ones(X.shape[0]), X].dot(th)))) > 0.5, 1, 0)
+            return np.where((1/(1+np.e**(-np.c_[np.ones(X.shape[0]), X].dot(self.th)))) > 0.5, 1, 0)
         else:
             return np.where(X.dot(self.th) > 0.5, 1, 0)
 
