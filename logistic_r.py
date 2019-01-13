@@ -1,6 +1,17 @@
+#TODO: add tolerance feature
+#NOTE: this implementation works only for binary classification, for multiclass classification use logistic_regression_one_vs_all
+
 import numpy as np
 import matplotlib.pyplot as plt
 class LogisticRegression:
+    '''
+        INPUT:
+        normalize(bool): apply min-max normalization or not
+        add_bais(bool): add bais term or not
+        learning_rate(float): learning rate for algorithm
+        toll(float): how much tolerance algorithm can accept, can use for early stopping
+        max_itr(int): number of maximum iteration after which algorithm will stop
+    '''
     def __init__(self,normalize=True,add_bais=True,learning_rate=0.1,toll=0.0001,max_itr=100):
         self.normalize = normalize
         self.add_bais = add_bais
@@ -12,6 +23,15 @@ class LogisticRegression:
         self._max = 0
         
     def fit(self,X,y):
+        '''
+        DESCRIPTION:
+        takes input data and corrosponding labels and returns the parametes for hypothesis
+        INPUT:
+        X(np array): input data
+        y(np array): output labels
+        OUTPUT:
+        returns th, a np array of shape (X.shape[1],1) with parameter values for hypothesis
+        '''
         self._min = X.min()
         self._max = X.max()
         m = y.shape[0]
@@ -35,6 +55,14 @@ class LogisticRegression:
 
     
     def predict(self,X):
+        '''
+        DESCRIPTION:
+        takes input data and predicts corrosponding labels
+        INPUT:
+        X(np array): input data
+        OUTPUT:
+        returns a np array of predicted labels for input data
+        '''
         if(self.normalize):
             X = (X - self._min) / (self._max - self._min)
         if(self.add_bais):
